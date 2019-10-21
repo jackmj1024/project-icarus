@@ -16,7 +16,12 @@ namespace StardataCrusaders.ProjectIcarus {
 		private float fireTimer = 0f;
 
 		private void Update() {
-			if(Input.GetButton("Horizontal")) {
+
+			if (GameManager.singleton.gameState != GameManager.GameState.Active) {
+				return;
+			}
+
+			if (Input.GetButton("Horizontal")) {
 				Move();
 			}
 

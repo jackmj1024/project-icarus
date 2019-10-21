@@ -118,6 +118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 6
+  damage: 20
   hitClip: {fileID: 8300000, guid: cf846abd418744142ab6d62fc080e508, type: 3}
   deathClip: {fileID: 8300000, guid: 3a9b671d78145974e9ac6d2f90c81ba6, type: 3}
   earth: {fileID: 0}

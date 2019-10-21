@@ -6,7 +6,7 @@ namespace StardataCrusaders.ProjectIcarus {
 	public class Meteor : MonoBehaviour {
 
 		[SerializeField] private int health = 6;
-	//	[SerializeField] private Vector2 
+		[SerializeField] private float damage = 10f;
 
 		[SerializeField] private AudioClip hitClip;
 		[SerializeField] private AudioClip deathClip;
@@ -38,6 +38,10 @@ namespace StardataCrusaders.ProjectIcarus {
 		private void OnCollisionEnter2D(Collision2D collision) {
 			if(collision.gameObject.tag == "Attack") {
 				StartCoroutine(TakeDamage());
+			} else if(collision.gameObject.tag == "Earth") {
+				GameManager.singleton.dataCorruption += damage;
+				earth.spawnedMeteors.Remove(this);
+				Destroy(gameObject);
 			}
 		}
 
@@ -58,6 +62,7 @@ namespace StardataCrusaders.ProjectIcarus {
 				renderer.enabled = false;
 				yield return new WaitForSeconds(0.1f);
 				earth.spawnDelay -= 0.1f;
+				earth.spawnedMeteors.Remove(this);
 				Destroy(gameObject);
 			} else {
 				audio.PlayOneShot(hitClip);

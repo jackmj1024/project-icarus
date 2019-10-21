@@ -24,11 +24,24 @@ namespace StardataCrusaders.ProjectIcarus {
 
 		private void Update() {
 
+			if(GameManager.singleton.gameState != GameManager.GameState.Active) {
+				if(spawnedMeteors.Count > 0) {
+					foreach(Meteor _m in spawnedMeteors) {
+						Destroy(_m.gameObject);
+					}
+					spawnedMeteors.Clear();
+				}
+
+				return;
+			}
+
 			spawnDelay = Mathf.Clamp(spawnDelay, 0.5f, 10f);
 
 			// Normally we would just use InvokeRepeating() for this, but that doesn't work here since the spawn rate will be gradually increasing.
 			if(spawnTimer <= 0f) {
-				SpawnMeteors();
+				for (int i = 0; i < GameManager.singleton.level; i++) {
+					SpawnMeteors();
+				}
 				spawnTimer = spawnDelay;
 			} else {
 				spawnTimer -= Time.deltaTime;
@@ -37,13 +50,15 @@ namespace StardataCrusaders.ProjectIcarus {
 
 		private void SpawnMeteors() {
 
-			if (spawnedMeteors.Count >= 10)
+			if (spawnedMeteors.Count >= 20 * GameManager.singleton.level)
 				return;
 
 			SpawnArea _spawnArea = spawnAreas[Random.Range(0, spawnAreas.Count)];
 			Vector3 _position = new Vector3(Random.Range(_spawnArea.minX, _spawnArea.maxX), Random.Range(_spawnArea.minY, _spawnArea.maxY), 0f);
 
 			Meteor _meteor = Instantiate(meteors[Random.Range(0, meteors.Count)].gameObject, _position, Quaternion.identity).GetComponent<Meteor>();
+			spawnedMeteors.Add(_meteor);
+
 			_meteor.earth = this;
 			_meteor.earthRB = rb;
 		}
